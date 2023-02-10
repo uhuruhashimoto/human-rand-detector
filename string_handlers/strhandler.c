@@ -5,8 +5,7 @@
 char **create_random_strings(int min_len, int max_len, int num_str);
 void create_random_string(char *buff, int min_len, int max_len);
 void zero_pad(char *buff, int len);
-int write_to_csv_file(char **buff, int num_str, char *filename);
-void write_str_to_csv_file(FILE *f, char *str);
+int write_to_txt_file(char **buff, int num_str, char *filename);
 
 /*
 Generate cryptographically-secure random strings with OpenSSL within a given max and min length
@@ -61,12 +60,13 @@ void zero_pad(char *buff, int len)
             buff[i] = '0';
         }
     }
+    buff[len] = '\0';
 }
 
 /*
 * Writes zero-padded strings to a file in csv format
 */
-int write_to_csv_file(char **buff, int num_str, char *filename)
+int write_to_txt_file(char **buff, int num_str, char *filename)
 {
     FILE *f = fopen(filename, "w");
     if (f == NULL) {
@@ -75,16 +75,10 @@ int write_to_csv_file(char **buff, int num_str, char *filename)
     }
     int i;
     for (i = 0; i < num_str; i++) {
-        write_str_to_csv_file(f, buff[i]);
+        fprintf(f, "%s\n", buff[i]);
     }
     fclose(f);
     return 0;
-}
-
-void write_str_to_csv_file(FILE *f, char *str)
-{
-    fprintf(f, "%s", str);
-    fprintf(f, ",");
 }
 
 /*
@@ -104,6 +98,7 @@ int main(int argc, char **argv)
     char **buff = create_random_strings(min_len, max_len, num_str);
     for (int i = 0; i < num_str; i++) {
         zero_pad(buff[i], max_len);
+        #ifdef DEBUG
         int zeros = 0;
         int ones = 0;
         for (int j = 0; j < max_len; j++) {
@@ -115,6 +110,9 @@ int main(int argc, char **argv)
         }
         printf("String %d: %s  | ", i, buff[i]);
         printf("Zeros: %d, Ones: %d\n", zeros, ones);
+        #endif
     }
-    return write_to_csv_file(buff, num_str, filename);
+    printf("Writing random strings strings to file %s...\n", filename);
+    write_to_txt_file(buff, num_str, filename);
+
 }
