@@ -1,13 +1,13 @@
 CC=gcc
 CFLAGS=-I. -Wall -pedantic -std=c11 -ggdb -lcrypto
 
-make: readbits strhandler strmixer
+make: readbits randstr strmixer
 
 readbits: readbits.o
 	$(CC) -o readbits readbits.o $(CFLAGS)
 
-strhandler: strhandler.o
-	$(CC) -o strhandler strhandler.o $(CFLAGS)
+randstr: randstr.o
+	$(CC) -o randstr randstr.o $(CFLAGS)
 
 strmixer: strmixer.o
 	$(CC) -o strmixer strmixer.o $(CFLAGS)
