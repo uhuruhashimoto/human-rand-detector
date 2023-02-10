@@ -1,14 +1,14 @@
 CC=gcc
-CFLAGS=-I. -Wall -pedantic -std=c11 -ggdb 
+CFLAGS=-I. -Wall -pedantic -std=c11 -ggdb -lcrypto
 
-make: rc4demo desW23
+make: readbits strhandler
 
-rc4demo: rc4demo.o 
-	$(CC) -o rc4demo rc4demo.o $(CFLAGS) 
+readbits: readbits.o
+	$(CC) -o readbits readbits.o $(CFLAGS)
 
-desW23: desW23.o
-	$(CC) -o desW23 desW23.o $(CFLAGS) -lcrypto
+strhandler: strhandler.o
+	$(CC) -o strhandler strhandler.o $(CFLAGS)
 
 clean:
-	rm -f rc4demo desW23
+	rm -f readbits strhandler
 	rm -f  *.o
