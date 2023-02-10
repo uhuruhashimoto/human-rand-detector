@@ -46,6 +46,8 @@ def char_to_int(c) -> int:
 
 def read_batches(T, vocab_size):
     # TODO: configure to read n strings of [1, 0] from csv file
+    arr = np.loadtxt("training.csv",
+                 delimiter=",", dtype=str)
     length = T.shape[0]
     batch_chars = length // BATCH_SIZE
 
