@@ -23,3 +23,4 @@ They are designed to be run on a Linux machine with OpenSSL installed (to genera
 3. Run `./randstr [min] [max] [num_str] [filename]` to generate a file with an equal number of random lines
 4. Run `./strmixer [max] [num_str_per_file] [human_filename] [rand_filename]` to shuffle all the strings, zero-pad them, and put them into csv files
 5. The resulting `training.csv` and `labels.csv` is your training data
+*Note: do this on the Babylons for OpenSSL*
