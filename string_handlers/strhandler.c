@@ -2,29 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <openssl/rand.h>
-
-/*
-Creates OpenSSL random strings of length randomly between two values
-*/
-int main(int argc, char **argv)
-{
-    if (argc < 4) {
-        printf("Usage: ./strhandler <min_len> <max_len> <num_str> <filename>\n");
-        return -1;
-    }
-    int min_len = atoi(argv[1]);
-    int max_len = atoi(argv[2]);
-    int num_str = atoi(argv[3]);
-    char *filename = argv[4];
-
-    char **buff = create_random_strings(min_len, max_len, num_str);
-    for (int i = 0; i < num_str; i++) {
-        printf("String %d: %s\n", i, buff[i]);
-        zero_pad(buff[i], max_len);
-        printf("String %d: %s\n", i, buff[i]);
-    }
-    return write_to_csv_file(buff, num_str, filename);
-}
+char **create_random_strings(int min_len, int max_len, int num_str);
+void create_random_string(char *buff, int min_len, int max_len);
+void zero_pad(char *buff, int len);
+int write_to_csv_file(char **buff, int num_str, char *filename);
+void write_str_to_csv_file(FILE *f, char *str);
 
 /*
 Generate cryptographically-secure random strings with OpenSSL within a given max and min length
@@ -42,19 +24,27 @@ char **create_random_strings(int min_len, int max_len, int num_str)
 
 void create_random_string(char *buff, int min_len, int max_len)
 {
-    int i;
+    int i = 0;
     // calculate string length
-    RAND_bytes(&i, sizeof(int)); 
+    RAND_bytes((unsigned char *)&i, sizeof(int));
+    if (i < 0) {
+        i = -i;
+    }
     i = i % (max_len - min_len) + min_len;
     // generate rand bytes with OpenSSL of that length
-    char *str = malloc(i * sizeof(char));
-    RAND_bytes(str, i);
-    // convert bytes to string
+    // each char is 8 bits
+    int len_div_8 = i / 8;
+    int num_chars = len_div_8 + 1;
+    char *str = malloc(num_chars * sizeof(unsigned char));
+    RAND_bytes((unsigned char*)str, num_chars);
+    // convert bytes to string by bit shifting
     for (int j = 0; j < i; j++) {
-        if (str[j] == 0x00) {
-            buff[j] = '0';
-        } else {
+        int byte_index = j / 8;
+        int bit_index = j % 8;
+        if ((str[byte_index] >> bit_index) & 1) {
             buff[j] = '1';
+        } else {
+            buff[j] = '0';
         }
     }
     zero_pad(buff, max_len);
@@ -63,7 +53,7 @@ void create_random_string(char *buff, int min_len, int max_len)
 /*
 * Zero-pads all strings
 */
-int zero_pad(char *buff, int len)
+void zero_pad(char *buff, int len)
 {
     int i;
     for (i = 0; i < len; i++) {
@@ -93,6 +83,38 @@ int write_to_csv_file(char **buff, int num_str, char *filename)
 
 void write_str_to_csv_file(FILE *f, char *str)
 {
-    fprinf(f, "%s", str);
-    fprintf(",");
+    fprintf(f, "%s", str);
+    fprintf(f, ",");
+}
+
+/*
+Creates OpenSSL random strings of length randomly between two values
+*/
+int main(int argc, char **argv)
+{
+    if (argc < 4) {
+        printf("Usage: ./strhandler <min_len> <max_len> <num_str> <filename>\n");
+        return -1;
+    }
+    int min_len = atoi(argv[1]);
+    int max_len = atoi(argv[2]);
+    int num_str = atoi(argv[3]);
+    char *filename = argv[4];
+
+    char **buff = create_random_strings(min_len, max_len, num_str);
+    for (int i = 0; i < num_str; i++) {
+        zero_pad(buff[i], max_len);
+        int zeros = 0;
+        int ones = 0;
+        for (int j = 0; j < max_len; j++) {
+            if (buff[i][j] == '0') {
+                zeros++;
+            } else {
+                ones++;
+            }
+        }
+        printf("String %d: %s  | ", i, buff[i]);
+        printf("Zeros: %d, Ones: %d\n", zeros, ones);
+    }
+    return write_to_csv_file(buff, num_str, filename);
 }
