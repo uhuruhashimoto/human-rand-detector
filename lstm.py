@@ -9,12 +9,14 @@ from tensorflow.keras.layers import LSTM
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 
-# fix random seed for reproducibility
-tf.random.set_seed(7)
+if __name__ == "__main__":
+    n_test_str = 50
+    # load the dataset
+    # Train dataset is 10 strings with labels
+    # Test set is 50 strings without labels
 
-# load the dataset 
-# Train dataset is 10 strings with labels
+    # Normalize strings by zero padding
 
-# Normalize strings by zero padding
 
-# Test set is 50 strings without labels
+    n_hidden = 4
+    rnn_cell = LSTM(n_hidden)
