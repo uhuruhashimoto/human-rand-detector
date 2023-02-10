@@ -19,8 +19,7 @@ They are designed to be run on a Linux machine with OpenSSL installed (to genera
 ## Usage
 1. Type out as many bits (0 and 1) as you can stand into a .txt file, in equal time increments with newlines between them
     - For example, `101101101011100111...` for a minute, then hit `Enter`, and repeat n times.
-2. Get the length of the longest and shortest strings you typed out by running
-`cat training_data/[human-file].txt | head -n 5 | awk '{ print length; }'`
+2. Get the length of the longest and shortest strings you typed out by running `./minmax.sh [your-file]`
 3. Run `./randstr [min] [max] [num_str] [filename]` to generate a file with an equal number of random lines
 4. Run `./strmixer [max] [num_str_per_file] [human_filename] [rand_filename]` to shuffle all the strings, zero-pad them, and put them into csv files
 5. The resulting `training.csv` and `labels.csv` is your training data
