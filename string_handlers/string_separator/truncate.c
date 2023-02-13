@@ -5,7 +5,7 @@
 
 int main(const int argc, const char **argv) {
     if (argc < 3) {
-        printf("Usage: %s <filename> <separated filename>\n", argv[0]);
+        printf("Usage: %s <filename> <separated filename csv>\n", argv[0]);
         return -1;
     }
     // Take first 1000 chars, padding with zeros if necessary
@@ -39,7 +39,7 @@ int main(const int argc, const char **argv) {
                 }
             }
             truncated_line[1000] = 0x00;
-            fprintf(fp2, "%s\n", truncated_line);
+            fprintf(fp2, "%s,", truncated_line);
         }
         i++;
     }

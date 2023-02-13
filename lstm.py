@@ -46,6 +46,15 @@ def read_data_from_csv():
             int_arr[i][j] = char_to_int(arr[i][j])
     return int_labels, int_arr
 
+def load_final_data():
+    int_arr = np.ndarray(shape=(50, 1000), dtype=int)
+    arr = np.loadtxt("unlabeled_data/final.csv",
+                 delimiter=",", dtype=str)
+    for i in range(len(arr)):
+        for j in range(len(arr[i])):
+            int_arr[i][j] = char_to_int(arr[i][j])
+    return int_arr
+
 
 if __name__ == '__main__':
     labels, data = read_data_from_csv()
@@ -63,3 +72,9 @@ if __name__ == '__main__':
     plt.plot(labels, predict-labels, 'C2')
     plt.ylim(ymax = 3, ymin = -3)
     plt.show()
+
+    # Now we load the final data and predict
+    final_data = load_final_data()
+    print("Predicting final data...")
+    predict=model.predict(final_data)
+    print(predict)
