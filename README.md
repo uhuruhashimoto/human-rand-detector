@@ -19,7 +19,7 @@ Keras
 LSTM Tutorials
  - https://medium.com/@dclengacher/keras-lstm-recurrent-neural-networks-c1f5febde03d
  - https://www.tensorflow.org/guide/keras/rnn
- 
+
 GitHub examples
  - https://gist.github.com/karpathy/d4dee566867f8291f086
  - https://github.com/ekzhang/char-rnn-keras/blob/master/model.py
