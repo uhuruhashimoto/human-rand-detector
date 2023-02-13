@@ -4,6 +4,12 @@ import os
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import LSTM
+from keras.layers import Activation
+import matplotlib.pyplot as plt
+# prev code
 from keras.models import Sequential, load_model
 from keras.layers import LSTM, Dropout, TimeDistributed, Dense, Activation, Embedding
 import argparse
@@ -92,6 +98,18 @@ def train(model, data, epochs=1, batch_size=64, seq_len=50, vocab_size=2):
         save_weights(i, model)
 
 if __name__ == '__main__':
-    model = build_model(64, 50, 2)
-    model.summary()
-    read_data_from_csv()
+    labels, data = read_data_from_csv()
+    model = Sequential()
+    model.add(LSTM(8,input_shape=(1000,1),return_sequences=False))#True = many to many
+    model.add(Dense(2, kernel_initializer='normal', activation='linear'))
+    model.add(Dense(1,kernel_initializer='normal',activation='linear'))
+    model.compile(loss='mse',optimizer ='adam',metrics=['accuracy'])
+    print("Training model...")
+    model.fit(data,labels,epochs=2000,batch_size=1000,validation_split=0.05,verbose=0)
+    print("Evaluating model...")
+    scores = model.evaluate(data,labels,verbose=1,batch_size=1000)
+    print('Accuracy: {}'.format(scores[1]))
+    predict=model.predict(data)
+    plt.plot(labels, predict-labels, 'C2')
+    plt.ylim(ymax = 3, ymin = -3)
+    plt.show()
