@@ -1,5 +1,7 @@
 ## Human Generated Random Number Detector
-Recurrent NN (LSTM) for binary classification of human and random binary strings
+Recurrent NN (LSTM) for binary classification of human and random binary strings.
+
+*Important Note: this model does not contain a dataset of a size sufficient to obtain statistically significant results. Users are advised to seek out large online datasets if they want a successful model.*
 ## Build
 `pip install requirements.txt`
 `make` in corresponding subdirectory for text generation/manipulation with string handlers
