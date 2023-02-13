@@ -45,6 +45,7 @@ void allocate_buffer(char **buff, int num_strings, int max_length)
 int populate_buffer(char **buff, char *human_file, char *machine_file, int num_strings, int max_length)
 {
     // open first file and populate the first half of the buffer
+    char *temp = malloc(max_length * sizeof(char));
     FILE *f = fopen(human_file, "r");
     if (f == NULL) {
         printf("Error opening file\n");
@@ -52,6 +53,7 @@ int populate_buffer(char **buff, char *human_file, char *machine_file, int num_s
     }
     for (int i= 0; i < num_strings/2; i++) {
         fgets(buff[i], max_length+1, f);
+        fgets(temp, max_length+1, f);
         // pad with zeros
         int len_str = strlen(buff[i]);
         for (int j = len_str-1; j < max_length; j++) {
@@ -65,7 +67,6 @@ int populate_buffer(char **buff, char *human_file, char *machine_file, int num_s
         printf("Error opening file\n");
         return -1;
     }
-    char *temp = malloc(max_length * sizeof(char));
     for (int i = num_strings/2; i < num_strings; i++) {
         fgets(buff[i], max_length+1, f2);
         // clear buffer of single /0 character
